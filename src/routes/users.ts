@@ -1,4 +1,11 @@
+import { zValidator } from "@hono/zod-validator"
+import { z } from "zod"
 import { factory } from "@/factory"
+
+const zUserInput = z.object({
+  email: z.string().trim().email().max(254),
+  name: z.string().trim().min(1).max(128),
+})
 
 const mockUsers = [
   {
@@ -22,14 +29,14 @@ export const GET = factory.createHandlers((c) => {
   return c.json(mockUsers)
 })
 
-export const POST = factory.createHandlers((c) => {
+export const POST = factory.createHandlers(zValidator("json", zUserInput), (c) => {
+  const input = c.req.valid("json")
   const userId = crypto.randomUUID()
 
   const newUser = {
     id: userId,
-    name: "New User",
-    email: "newuser@example.com",
+    ...input,
   }
 
-  return c.json(newUser)
+  return c.json(newUser, 201)
 })
