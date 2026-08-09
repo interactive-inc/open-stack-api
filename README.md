@@ -1,12 +1,17 @@
 # Open Stack API
 
-```
-bun i
-bun run dev
+Cloudflare Workers 上で動作する Hono API のテンプレート。
+
+```bash
+vp install
+vp run dev
 ```
 
-もしくは
+## 検証
 
-```
-bun run src
+```bash
+vp lint
+vp fmt
+vp test
+vp run check
 ```
